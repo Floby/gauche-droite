@@ -274,6 +274,8 @@ form {
 <script src="./md5.js"></script>
 <script>
 
+delete localStorage.salt
+
 const params = Object.fromEntries((location.search || '?').substr(1).split('&').map((entry) => entry.split('=')))
 if (params.prompt) {
   displayResult(decodeURIComponent(params.prompt).replace(/\+/g, ' '))
@@ -365,7 +367,7 @@ function collectFeedback(button, section) {
   const feedback = document.querySelector('.feedback')
   if (button.classList.contains('no')) {
     feedback.innerHTML = '<p>Merci pour votre avis, le modèle sera mis à jour.</p>'
-    localStorage.salt = String(Math.floor(Math.random()*100))
+    //localStorage.salt = String(Math.floor(Math.random()*100))
   } else {
     feedback.innerHTML = '<p>Merci pour votre avis.</p>'
   }
