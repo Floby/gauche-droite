@@ -31,6 +31,12 @@ h1, h2, h3 {
   font-family: var(--font-display);
 }
 
+@media (max-width: 40rem) {
+  body {
+    font-size: 70%;
+  }
+}
+
 a {
   color: white;
   text-decoration: none;
@@ -51,7 +57,8 @@ body, div, main, form, fieldset, footer, section {
 
 label > h1 {
   font-family: var(--font-main);
-  font-size: 2.5rem;
+  font-size: 2.5em;
+  text-align: center;
 }
 
 body.gauche {
@@ -68,7 +75,7 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1em;
   background: var(--color-neutral);
 
   transition: background-color 200ms ease-in-out;
@@ -84,18 +91,34 @@ body > main {
 form input {
   font-family: var(--font-main);
   display: inline-block;
-  height: 4rem;
-  width: 30rem;
+  height: 2.5em;
+  width: 30em;
   width:  70vw;
   box-sizing: border-box;
   padding: .5rem 1rem;
-  border-radius: 3rem 0 0 3rem;
+  padding-left: 1em;
+  border-radius: 3em 0 0 3em;
   border: none;
-  font-size: 2rem;
+  font-size: 2em;
 }
 form input[type=submit] {
-  width: 5rem;
+  width: 5em;
   border-radius: 0 3rem 3rem 0;
+}
+@media (max-width: 40rem) {
+  fieldset {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+  }
+  fieldset input {
+    flex-grow: 10;
+  }
+  fieldset input[type=submit] {
+    flex-grow: 0;
+    width: auto;
+  }
 }
 
 .result {
@@ -107,7 +130,7 @@ form input[type=submit] {
   align-items: center;
 }
 .result h2 {
-  font-size: 3.5rem;
+  font-size: 3.5em;
 
 }
 
