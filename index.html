@@ -137,6 +137,17 @@ form input[type=submit] {
   padding-left: .5rem;
   border-radius: 0 3rem 3rem 0;
 }
+
+form .salty {
+  display: block;
+  margin-top: 1rem;
+  margin-left: 2rem;
+  visibility: hidden;
+}
+form.salted .salty {
+  visibility: visible;
+}
+
 @media (max-width: 40rem) {
   fieldset {
     width: 80%;
@@ -219,6 +230,7 @@ form {
         <fieldset id="prompt-wrapper">
           <input type="text" name="prompt" placeholder="saisissez quelque chose" id="prompt" aria-describedby="answer">
           <input type="submit" name="go" value="Go">
+          <span class="salty">Vous utilisez un modèle adapté à vos retours. <a href="#">Revenir au modèle inital.</a></span>
         </fieldset>
       </form>
       <section id="result">
@@ -254,6 +266,13 @@ if (params.prompt) {
 
 const form = document.querySelector('form')
 form.addEventListener('submit', (e) => onFormSubmit(form, e))
+form.querySelector('.salty a').addEventListener('click', (e) => {
+  delete localStorage.salt
+  location.reload()
+})
+if (localStorage.salt) {
+  form.classList.add('salted')
+}
 
 function displayResult(input) {
   const [answerSlug, answerLabel] = getAnswer(input)
@@ -307,7 +326,7 @@ function normalize (input) {
         .replace(/[îï]/g, 'i')
         .replace(/[üû]/g, 'u')
         .replace(/(.)(ants?|antes?)$/, '$1ANT')
-        .replace(/(.)(eurs,|euses?|rices?)$/, '$1EUR')
+        .replace(/(.)(eurs?|euses?|rices?)$/, '$1EUR')
         .replace(/(.)(iers?|ieres?)$/, '$1IER')
         .replace(/(.)(iens?|i?ennes?)$/, '$1IEN')
         .replace(/(.)(ifs?|i?ives?)$/, '$1IF')
@@ -329,7 +348,12 @@ function onFormSubmit(form, e) {
 
 function collectFeedback(button, section) {
   const feedback = document.querySelector('.feedback')
-  feedback.innerHTML = '<p>Merci pour votre avis.</p>'
+  if (button.classList.contains('no')) {
+    feedback.innerHTML = '<p>Merci pour votre avis, le modèle sera mis à jour.</p>'
+    localStorage.salt = String(Math.floor(Math.random()*100))
+  } else {
+    feedback.innerHTML = '<p>Merci pour votre avis.</p>'
+  }
 }
 
 </script>
