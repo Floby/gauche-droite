@@ -11,7 +11,7 @@ Objectif
 --------
 
 Aucun objectif sérieux. Ce site se cache derrière les mots compliqués que sont _algorithme_, _cryptographie_ ou encore
-_intelligence artificielle_ pour se parer des atour de la sophistication. En pratique, la réponse est déterminée plus
+_intelligence artificielle_ pour se parer des atours de la sophistication. En pratique, la réponse est déterminée plus
 ou moins au hasard.
 
 Il est toutefois à noter, que ce modèle bien plus léger en ressources donne des résultats d'une précision
