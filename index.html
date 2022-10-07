@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>De Gauche ou de Droite ? | by Floby 💜</title> 
+
+    <meta property="og:image" content="./banner.png" />
+    <meta property="og:description"
+        content="Un algorithme d'intelligence artificielle qui décide aussi si les choses sont de gauche ou de droite." />
+    <meta property="og:title" content="C'est de gauche ou de droite?" />
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<style>
+:root {
+  --font-main: 'Ubuntu', sans-serif;
+  --font-display: 'Rammetto One', cursive;
+  --color-neutral: #342b3b;
+  --color-on-neutral: white;
+  --color-gauche: #ca1763;
+  --color-droite: #3f1ca0;
+  font-family: var(--font-main);
+  color: white;
+}
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+
+body, div, main, form, fieldset, footer, section {
+  display: block;
+  border: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+label > h1 {
+  font-family: var(--font-main);
+  font-size: 2.5rem;
+}
+
+body.gauche {
+  background: var(--color-gauche);
+}
+body.droite {
+  background: var(--color-droite);
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: var(--color-neutral);
+
+  transition: background-color 200ms ease-in-out;
+}
+body > main {
+  flex-grow: 10;
+  padding-top: 20vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  font-family: var(--font-main);
+  display: inline-block;
+  height: 4rem;
+  width: 30rem;
+  width:  70vw;
+  box-sizing: border-box;
+  padding: .5rem 1rem;
+  border-radius: 3rem 0 0 3rem;
+  border: none;
+  font-size: 2rem;
+}
+form input[type=submit] {
+  width: 5rem;
+  border-radius: 0 3rem 3rem 0;
+}
+
+.result {
+  text-align: center;
+  flex-grow: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.result h2 {
+  font-size: 3.5rem;
+
+}
+
+
+footer {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
+
+  </head>
+  <body id="body">
+    <main>
+      <form method="get" accept-charset="utf-8">
+        <label for="prompt"><h1>C'est de gauche ou de droite ?</h1></label>
+        <fieldset id="prompt-wrapper">
+          <input type="text/submit/hidden/button" name="prompt" placeholder="saisissez quelque chose" id="prompt">
+          <input type="submit" name="go" value="Go">
+        </fieldset>
+      </form>
+      <section id="result" class="result">
+      </section>
+      <template id="result-template">
+        <h2>
+          <span class="prompt">Machin</span>,&nbsp;<span class="answer">c'est de <span class="value">droite</span>.</span>
+        </h2>
+      </template>
+    </main>
+    <footer>
+      <small>
+        Réponses générées par une algorithme d'intelligence artificielle. Indiquez si vous êtes d'accord avec
+        la réponse pour peut-être influencer le modèle de données. <br>
+        Créé par <a href="https://twitter.com/floby">@Floby</a> sur l'inspiration évidente du travail de
+        <a href="https://twitter.com/DelemazureTheo">@DelemazureTheo</a>.
+      </small>
+    </footer>
+<script src="./md5.js"></script>
+<script>
+
+const params = Object.fromEntries((location.search || '?').substr(1).split('&').map((entry) => entry.split('=')))
+console.log(params)
+if (params.prompt) {
+  displayResult(decodeURIComponent(params.prompt).replace(/\+/g, ' '))
+}
+
+const form = document.querySelector('form')
+form.addEventListener('submit', (e) => onFormSubmit(form, e))
+
+function displayResult(input) {
+  const answer = getAnswer(input)
+  document.body.classList.add('answered', answer);
+  document.getElementById('prompt').value = input
+  const template = document.getElementById('result-template')
+  const res = template.content.cloneNode(true)
+  res.querySelector('.prompt').innerText = formatInput(input);
+  res.querySelector('.value').innerText = answer;
+  document.getElementById('result').replaceChildren(res)
+}
+
+function getAnswer(input) {
+  console.log(normalize(input))
+  const hash = calcMD5(normalize(input))
+  const answer = hash < '9' ? 'gauche' : 'droite'
+  return answer
+}
+
+function normalize (input) {
+  return input
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/-/g, ' ')
+    .split(' ')
+    .map((word) => word
+        .replace(/ç/g, 'c')
+        .replace(/ç/g, 'c')
+        .replace(/à/g, 'a')
+        .replace(/[êëè]/g, 'E')
+        .replace(/(ez|er)$/, 'é')
+        .replace(/(s|x|e)$/, '')
+        )
+    .join(' ')
+}
+
+function formatInput(input) {
+  const [first, ...rest] = input
+  return `${first.toUpperCase()}${rest.join('')}`
+}
+
+function onFormSubmit(form, e) {
+  form.querySelector('[type=submit]').value = '…'
+}
+
+</script>
+  </body>
+</html>
