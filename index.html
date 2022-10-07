@@ -136,15 +136,16 @@ form input[type=submit] {
   width: 5em;
   padding-left: .5rem;
   border-radius: 0 3rem 3rem 0;
+  cursor: pointer;
 }
 
-form .salty {
+.salty {
   display: block;
   margin-top: 1rem;
   margin-left: 2rem;
   visibility: hidden;
 }
-form.salted .salty {
+.salted .salty {
   visibility: visible;
 }
 
@@ -154,6 +155,14 @@ form.salted .salty {
     display: flex;
     flex-direction: row;
     gap: 2px;
+    position: relative;
+  }
+  fieldset .salty {
+    position: absolute;
+    width: calc(100% - 4em);
+    margin: 0;
+    top: calc(100% + 1em);
+    left: 2em;
   }
   fieldset input {
     flex-grow: 10;
@@ -181,6 +190,12 @@ form.salted .salty {
 }
 .result h2 {
   font-size: 3.5em;
+}
+.result h2 span:last-child::after {
+  content: '.';
+}
+.salted .result h2 span:last-child::after {
+  content: '*';
 }
 
 .feedback {
@@ -238,7 +253,7 @@ form {
       <template id="result-template">
         <div id="answer" class="sr-only"></div>
         <h2>
-          <span class="prompt">Machin</span>, <span class="answer">c'est <span class="value">de droite</span>.</span>
+          <span class="prompt">Machin</span>, c'est <span class="value">de droite</span>
         </h2>
         <div class="feedback">
           <button class="yes">D'accord 😊</button>
@@ -271,7 +286,7 @@ form.querySelector('.salty a').addEventListener('click', (e) => {
   location.reload()
 })
 if (localStorage.salt) {
-  form.classList.add('salted')
+  document.body.classList.add('salted')
 }
 
 function displayResult(input) {
