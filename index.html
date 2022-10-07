@@ -1,20 +1,19 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="fr">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>De Gauche ou de Droite ? | by Floby 💜</title> 
 
-    <meta property="og:image" content="./banner.png" />
+    <meta property="og:image" content="https://projects.flo.by/gauche-droite/banner.png" />
     <meta property="og:description"
-        content="Un algorithme d'intelligence artificielle qui décide aussi si les choses sont de gauche ou de droite." />
+        content="Un algorithme cryptographique d'intelligence artificielle qui décide aussi si les choses sont de gauche ou de droite." />
     <meta property="og:title" content="C'est de gauche ou de droite?" />
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <style>
 :root {
@@ -22,8 +21,10 @@
   --font-display: 'Rammetto One', cursive;
   --color-neutral: #342b3b;
   --color-on-neutral: white;
+  --color-xtrem-gauche: #261121;
   --color-gauche: #ca1763;
   --color-droite: #3f1ca0;
+  --color-xtrem-droite: #502b22;
   font-family: var(--font-main);
   color: white;
 }
@@ -31,9 +32,9 @@ h1, h2, h3 {
   font-family: var(--font-display);
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 50rem) {
   body {
-    font-size: 70%;
+    font-size: 60%;
   }
 }
 
@@ -55,17 +56,30 @@ body, div, main, form, fieldset, footer, section {
   box-sizing: border-box;
 }
 
+.illustration {
+  display: none;
+}
 label > h1 {
   font-family: var(--font-main);
   font-size: 2.5em;
   text-align: center;
 }
 
+body {
+  --color-current-answer: var(--color-neutral);
+  background: var(--color-current-answer);
+}
+body.xtrem-gauche {
+  --color-current-answer: var(--color-xtrem-gauche);
+}
 body.gauche {
-  background: var(--color-gauche);
+  --color-current-answer: var(--color-gauche);
 }
 body.droite {
-  background: var(--color-droite);
+  --color-current-answer: var(--color-droite);
+}
+body.xtrem-droite {
+  --color-current-answer: var(--color-xtrem-droite);
 }
 
 body {
@@ -76,9 +90,8 @@ body {
   display: flex;
   flex-direction: column;
   padding: 1em;
-  background: var(--color-neutral);
 
-  transition: background-color 200ms ease-in-out;
+  transition: background-color 500ms ease-in-out 500ms;
 }
 body > main {
   flex-grow: 10;
@@ -86,6 +99,11 @@ body > main {
 
   display: flex;
   flex-direction: column;
+}
+
+@keyframes fadein {
+  from { opacity: 0 }
+  to { opacity: 1}
 }
 
 form input {
@@ -102,7 +120,12 @@ form input {
   font-size: 2em;
 }
 form input[type=submit] {
+  background: lightgray;
+  border: none;
+  color: var(--color-current-answer);
+  transition: color 500ms ease-in-out 500ms;
   width: 5em;
+  padding-left: .5rem;
   border-radius: 0 3rem 3rem 0;
 }
 @media (max-width: 40rem) {
@@ -121,22 +144,54 @@ form input[type=submit] {
   }
 }
 
+#result {
+  opacity: 0;
+  transition: opacity 500ms ease-in-out 500ms;
+}
+#result.result {
+  opacity: 1;
+}
 .result {
   text-align: center;
   flex-grow: 10;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
 .result h2 {
   font-size: 3.5em;
-
 }
 
+.feedback {
+  height: 5em;
+  animation: fadein 500ms ease-in-out 1s;
+  animation-fill-mode: backwards;
+}
+.feedback button {
+  background: var(--color-on-neutral);
+  padding: 1em 2em;
+  font-size: 1.2em;
+  font-family: var(--font-main);
+  border: none;
+  cursor: pointer;
+}
+.feedback button.yes {
+  border-radius: 3em 0 0 3em;
+}
+.feedback button.no {
+  border-radius: 0 3em 3em 0;
+}
+
+.sr-only {
+  display: none;
+}
 
 footer {
   text-align: center;
+}
+footer small {
+  font-size: 1rem;
 }
 
 form {
@@ -149,24 +204,30 @@ form {
   </head>
   <body id="body">
     <main>
+      <img src="./banner.png" class="illustration">
       <form method="get" accept-charset="utf-8">
         <label for="prompt"><h1>C'est de gauche ou de droite ?</h1></label>
         <fieldset id="prompt-wrapper">
-          <input type="text/submit/hidden/button" name="prompt" placeholder="saisissez quelque chose" id="prompt">
+          <input type="text" name="prompt" placeholder="saisissez quelque chose" id="prompt" aria-describedby="answer">
           <input type="submit" name="go" value="Go">
         </fieldset>
       </form>
-      <section id="result" class="result">
+      <section id="result">
       </section>
       <template id="result-template">
+        <div id="answer" class="sr-only"></div>
         <h2>
-          <span class="prompt">Machin</span>,&nbsp;<span class="answer">c'est de <span class="value">droite</span>.</span>
+          <span class="prompt">Machin</span>,&nbsp;<span class="answer">c'est <span class="value">de droite</span>.</span>
         </h2>
+        <div class="feedback">
+          <button class="yes">D'accord 😊</button>
+          <button class="no">😤 Pas d'accord</button>
+        </div>
       </template>
     </main>
     <footer>
       <small>
-        Réponses générées par une algorithme d'intelligence artificielle. Indiquez si vous êtes d'accord avec
+        Réponses générées par une algorithme cryptographique d'intelligence artificielle. Indiquez si vous êtes d'accord avec
         la réponse pour peut-être influencer le modèle de données. <br>
         Créé par <a href="https://twitter.com/floby">@Floby</a> sur l'inspiration évidente du travail de
         <a href="https://twitter.com/DelemazureTheo">@DelemazureTheo</a>.
@@ -176,7 +237,6 @@ form {
 <script>
 
 const params = Object.fromEntries((location.search || '?').substr(1).split('&').map((entry) => entry.split('=')))
-console.log(params)
 if (params.prompt) {
   displayResult(decodeURIComponent(params.prompt).replace(/\+/g, ' '))
 }
@@ -185,36 +245,64 @@ const form = document.querySelector('form')
 form.addEventListener('submit', (e) => onFormSubmit(form, e))
 
 function displayResult(input) {
-  const answer = getAnswer(input)
-  document.body.classList.add('answered', answer);
+  const [answerSlug, answerLabel] = getAnswer(input)
+  document.body.classList.add('answered', answerSlug);
   document.getElementById('prompt').value = input
+  document.getElementById('prompt').focus()
+  document.title = `${formatInput(input)} | ${document.title}`
+  document.querySelector('meta[property="og:title"]').content = `${formatInput(input)}, c'est de gauche ou de droite ?`
   const template = document.getElementById('result-template')
   const res = template.content.cloneNode(true)
   res.querySelector('.prompt').innerText = formatInput(input);
-  res.querySelector('.value').innerText = answer;
+  res.querySelector('.value').innerText = answerLabel;
+  res.querySelector('.sr-only').innerText = `${formatInput(input)}, c'est ${answerLabel}`;
+  res.querySelectorAll('.feedback button').forEach((button) => {
+    button.addEventListener('click', () => collectFeedback(button, res))
+  })
   document.getElementById('result').replaceChildren(res)
+  document.getElementById('result').classList.add('result')
 }
 
 function getAnswer(input) {
-  console.log(normalize(input))
-  const hash = calcMD5(normalize(input))
-  const answer = hash < '9' ? 'gauche' : 'droite'
-  return answer
+  const salt = window.localStorage.salt || 'yes';
+  const hash = calcMD5(salt + normalize(input))
+  console.log(normalize(input), hash)
+  if (hash < '1a') {
+    return ['xtrem-gauche', "d'extrême gauche"]
+  } else if (hash < '8') {
+    return ['gauche', "de gauche"]
+  } else if (hash < 'dd') {
+    return ['droite', "de droite"]
+  } else {
+    return ['xtrem-droite', "d'extrême droite"]
+  }
 }
 
 function normalize (input) {
   return input
     .toLowerCase()
+    .trim()
+    .replace(/[,.;!?]/g, '')
     .replace(/\s+/g, ' ')
     .replace(/-/g, ' ')
+    .replace(/^(le |la |l'|les |un |une |des )/, '')
     .split(' ')
     .map((word) => word
         .replace(/ç/g, 'c')
         .replace(/ç/g, 'c')
         .replace(/à/g, 'a')
-        .replace(/[êëè]/g, 'E')
+        .replace(/é(.)/g, 'e$1')
+        .replace(/[ëèê]/g, 'e')
+        .replace(/[îï]/g, 'i')
+        .replace(/[üû]/g, 'u')
+        .replace(/(.)(ants?|antes?)$/, '$1ANT')
+        .replace(/(.)(eurs,|euses?|rices?)$/, '$1EUR')
+        .replace(/(.)(iers?|ieres?)$/, '$1IER')
+        .replace(/(.)(iens?|i?ennes?)$/, '$1IEN')
+        .replace(/(.)(ifs?|i?ives?)$/, '$1IF')
         .replace(/(ez|er)$/, 'é')
-        .replace(/(s|x|e)$/, '')
+        .replace(/(aux)$/, 'al')
+        .replace(/(s|x|e|es)$/, '')
         )
     .join(' ')
 }
@@ -225,7 +313,12 @@ function formatInput(input) {
 }
 
 function onFormSubmit(form, e) {
-  form.querySelector('[type=submit]').value = '…'
+  //form.querySelector('[type=submit]').value = '…'
+}
+
+function collectFeedback(button, section) {
+  const feedback = document.querySelector('.feedback')
+  feedback.innerHTML = '<p>Merci pour votre avis.</p>'
 }
 
 </script>
