@@ -318,7 +318,7 @@ function getAnswer(input) {
     return ['xtrem-gauche', "d'extrême gauche"]
   } else if (hash < '8') {
     return ['gauche', "de gauche"]
-  } else if (hash < 'dd') {
+  } else if (hash < 'df') {
     return ['droite', "de droite"]
   } else {
     return ['xtrem-droite', "d'extrême droite"]
@@ -360,6 +360,8 @@ function formatInput(input) {
 }
 
 function onFormSubmit(form, e) {
+  const prompt = form.querySelector('#prompt')
+  prompt.value = prompt.value.trim()
   //form.querySelector('[type=submit]').value = '…'
 }
 
