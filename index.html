@@ -21,10 +21,10 @@
   --font-display: 'Rammetto One', cursive;
   --color-neutral: #342b3b;
   --color-on-neutral: white;
-  --color-xtrem-gauche: #261121;
+  --color-xgauche: #261121;
   --color-gauche: #ca1763;
   --color-droite: #3f1ca0;
-  --color-xtrem-droite: #502b22;
+  --color-xdroite: #502b22;
   font-family: var(--font-main);
   color: white;
 }
@@ -73,8 +73,8 @@ body {
   --color-current-answer: var(--color-neutral);
   background: var(--color-current-answer);
 }
-body.xtrem-gauche {
-  --color-current-answer: var(--color-xtrem-gauche);
+body.xgauche {
+  --color-current-answer: var(--color-xgauche);
 }
 body.gauche {
   --color-current-answer: var(--color-gauche);
@@ -82,8 +82,8 @@ body.gauche {
 body.droite {
   --color-current-answer: var(--color-droite);
 }
-body.xtrem-droite {
-  --color-current-answer: var(--color-xtrem-droite);
+body.xdroite {
+  --color-current-answer: var(--color-xdroite);
 }
 
 body {
@@ -295,33 +295,33 @@ function displayResult(input) {
   const [answerSlug, answerLabel] = getAnswer(input)
   document.body.classList.add('answered', answerSlug);
   document.getElementById('prompt').value = input
-  document.getElementById('prompt').focus()
-  document.title = `${formatInput(input)} | ${document.title}`
-  document.querySelector('meta[property="og:title"]').content = `${formatInput(input)}, c'est de gauche ou de droite ?`
-  const template = document.getElementById('result-template')
-  const res = template.content.cloneNode(true)
-  res.querySelector('.prompt').innerText = formatInput(input);
-  res.querySelector('.value').innerText = answerLabel;
-  res.querySelector('.sr-only').innerText = `${formatInput(input)}, c'est ${answerLabel}`;
-  res.querySelectorAll('.feedback button').forEach((button) => {
-    button.addEventListener('click', () => collectFeedback(button, res))
-  })
-  document.getElementById('result').replaceChildren(res)
-  document.getElementById('result').classList.add('result')
+document.getElementById('prompt').focus()
+document.title = `${formatInput(input)} | ${document.title}`
+document.querySelector('meta[property="og:title"]').content = `${formatInput(input)}, c'est de gauche ou de droite ?`
+const template = document.getElementById('result-template')
+const res = template.content.cloneNode(true)
+res.querySelector('.prompt').innerText = formatInput(input);
+res.querySelector('.value').innerText = answerLabel;
+res.querySelector('.sr-only').innerText = `${formatInput(input)}, c'est ${answerLabel}`;
+res.querySelectorAll('.feedback button').forEach((button) => {
+  button.addEventListener('click', () => collectFeedback(button, res))
+})
+document.getElementById('result').replaceChildren(res)
+document.getElementById('result').classList.add('result')
 }
 
 function getAnswer(input) {
-  const salt = window.localStorage.salt || 'yes';
-  const hash = calcMD5(salt + normalize(input))
-  console.log(normalize(input), hash)
-  if (hash < '1a') {
-    return ['xtrem-gauche', "d'extrême gauche"]
+const salt = window.localStorage.salt || 'yes';
+const hash = calcMD5(salt + normalize(input))
+console.log(normalize(input), hash)
+if (hash < '1a') {
+  return ['xgauche', "d'extrême gauche"]
   } else if (hash < '8') {
     return ['gauche', "de gauche"]
   } else if (hash < 'df') {
     return ['droite', "de droite"]
   } else {
-    return ['xtrem-droite', "d'extrême droite"]
+    return ['xdroite', "d'extrême droite"]
   }
 }
 
